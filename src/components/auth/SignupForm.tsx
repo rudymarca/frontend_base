@@ -1,5 +1,7 @@
+"use client"
 import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons"
 import { Button, Form, Input } from "antd"
+import axios from "axios"
 
 interface LoginValues {
   name: string
@@ -12,8 +14,12 @@ const SignupForm = () => {
   //? HOOKS
   //? STATE
   //? FUNCTION
-  const onFinish = (values: LoginValues) => {
-    console.log("Login success:", values)
+  const onFinish = async (values: LoginValues) => {
+    // console.log("Login success:", values)
+    const res = await axios.post("/api/auth/register", {
+      ...values,
+    })
+    console.log(res)
   }
   //? EFFECT
   //? RENDER
