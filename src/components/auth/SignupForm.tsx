@@ -15,7 +15,6 @@ const SignupForm = () => {
   //? STATE
   //? FUNCTION
   const onFinish = async (values: LoginValues) => {
-    // console.log("Login success:", values)
     const res = await axios.post("/api/auth/register", {
       ...values,
     })
