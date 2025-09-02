@@ -2,6 +2,8 @@
 import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons"
 import { Button, Form, Input } from "antd"
 import axios from "axios"
+import { signIn } from "next-auth/react"
+import { useRouter } from "next/navigation"
 
 interface LoginValues {
   name: string
@@ -12,6 +14,7 @@ interface LoginValues {
 
 const SignupForm = () => {
   //? HOOKS
+  const router = useRouter()
   //? STATE
   //? FUNCTION
   const onFinish = async (values: LoginValues) => {
@@ -19,6 +22,18 @@ const SignupForm = () => {
       ...values,
     })
     console.log(res)
+    if (res.status === 201) {
+      const result = await signIn("credentials", {
+        redirect: false,
+        email: res.data.email,
+        password: values.password,
+      })
+      if (!result?.ok) {
+        console.log("res", result?.error)
+        return null
+      }
+      router.push("/dashboard")
+    }
   }
   //? EFFECT
   //? RENDER
@@ -36,7 +51,7 @@ const SignupForm = () => {
         name="email"
         rules={[{ required: true, message: "Por favor ingresa tu Email!" }]}
       >
-        <Input prefix={<MailOutlined />} placeholder="Email" autoFocus />
+        <Input prefix={<MailOutlined />} placeholder="Email" />
       </Form.Item>
 
       <Form.Item<LoginValues>
